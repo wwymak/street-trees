@@ -1,0 +1,26 @@
+{
+  "name": "geo-vis-experiments",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "1.0.14"
+  },
+  "dependencies": {
+    "@turf/turf": "^4.7.3",
+    "autobind-decorator": "^2.1.0",
+    "d3": "^4.11.0",
+    "deck.gl": "^4.1.4",
+    "luma.gl": "^4.0.5",
+    "ospoint": "^0.2.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-map-gl": "^3.0.5",
+    "react-vis": "^1.7.9"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
