@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
+import {TreesLayerControl} from './controls/layerControl';
 import './App.css';
 import MapGL from 'react-map-gl';
 import * as d3 from 'd3';
@@ -25,9 +25,11 @@ class App extends Component {
                 maxZoom: 20,
                 minZoom: 9
             },
-            data: []
+            data: {},
+            settings: []
         };
         this.resizeHandler = this.resizeHandler.bind(this);
+        this.layerChangeHandler = this.layerChangeHandler.bind(this)
     }
 
     componentDidMount() {
@@ -52,16 +54,19 @@ class App extends Component {
                     parsed.push({...d, ...ospoint.toWGS84()});
                 });
                 let groupedByTrees = d3.nest().key(d => d.name).object(parsed);
-                console.log(groupedByTrees)
+                let settingsTrees = {};
+                Object.keys(groupedByTrees).forEach(d=> {settingsTrees[d.name]  = d.value});
                 this.setState({
-                    // data: groupedByTrees
-                    data: parsed
+                    data: groupedByTrees,
+                    // settings: settingsTrees
+                    settings: Object.keys(groupedByTrees).map(key => {return {name: key, value: true, target: `trees-layer-${key}`}})
                 });
+                console.log(this.state.settings)
                 this.forceUpdate()
             } else {
 
                 this.setState({
-                    data: []
+                    data: {}
                 })
             }
         })
@@ -71,9 +76,6 @@ class App extends Component {
         window.removeEventListener('resize', this.resizeHandler)
     }
 
-    parseDate (data) {
-
-    }
 
     viewportChangeHandler(viewport) {
         this.setState({
@@ -87,13 +89,19 @@ class App extends Component {
             height: window.innerHeight
         })
     }
+    layerChangeHandler (settings) {
+        this.setState ({
+            settings:settings
+        })
+    }
     render() {
+        console.log(this.state.settings)
         return (
             <div className="App">
-                {/*<header className="App-header">*/}
-                    {/*<img src={logo} className="App-logo" alt="logo" />*/}
-                    {/*<h1 className="App-title">geo-vis</h1>*/}
-                {/*</header>*/}
+                <TreesLayerControl
+                    settings={this.state.settings}
+                    onChange={settings => this.layerChangeHandler(settings)}
+                />
                 <MapGL
                     {...this.state.viewport}
                     mapStyle={MAPBOX_STYLE}
@@ -106,6 +114,7 @@ class App extends Component {
                     <TreesOverlay
                         viewport = {this.state.viewport}
                         data = {this.state.data}
+                        settings = {this.state.settings}
                     />
                 </MapGL>
             </div>
