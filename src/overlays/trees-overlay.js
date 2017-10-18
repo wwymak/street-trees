@@ -24,7 +24,7 @@ export default class TreesOverlay extends Component {
                             }
                             return 7;
                         },
-                        onHover: info => console.log('Hovered:', info),
+                        onHover: info => {console.log('Hovered:', info, key); this.props.onHover(info, key)},
                         onClick: info => console.log('Clicked:', info),
                         pickable: true,
                         radiusMinPixels: 0.25,
@@ -40,7 +40,6 @@ export default class TreesOverlay extends Component {
 
 
         });
-        console.log(layers.length);
 
         return (
             <DeckGL {...this.props.viewport} layers={layers}/>

@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import {TreesLayerControl} from './controls/layerControl';
+import Select from 'react-select';
+
 import './App.css';
+import './react-select.css';
+import { tooltipStyle } from './styles';
+
 import MapGL from 'react-map-gl';
 import * as d3 from 'd3';
 import OSPoint from 'ospoint';
-
+import {TreesLayerControl} from './controls/layerControl';
 import TreesOverlay from './overlays/trees-overlay';
 
-const MAPBOX_STYLE = 'mapbox://styles/mapbox/dark-v9';
+const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9';
 const MAPBOX_KEY = 'pk.eyJ1Ijoid3d5bWFrIiwiYSI6IkxEbENMZzgifQ.pxk3bdzd7n8h4pKzc9zozw';
 const TREE_NAMES = [ 'Cherry', 'Maple', 'Lime', 'Plane', 'Ash', 'Oak', 'Whitebeam', 'Birch', 'Hawthorn', 'Apple', 'Hornbeam', 'Chestnut', 'Pear', 'Cypress', 'Poplar', 'Alder', 'Willow', 'Beech', 'Pine', 'Black Locust', 'Elm', 'Hazel' ];
 const colorScale = d3.scaleOrdinal(d3.schemeCategory20b).domain(TREE_NAMES.slice(0, 20));
-console.log(colorScale('Cherry'), d3.rgb(colorScale('Cherry')))
 class App extends Component {
     constructor(props) {
         super (props);
@@ -26,7 +29,12 @@ class App extends Component {
                 minZoom: 9
             },
             data: {},
-            settings: []
+            settings: [],
+            // hoverInfo
+            mouseX: 0,
+            mouseY: 0,
+            hoveredObject: null,
+
         };
         this.resizeHandler = this.resizeHandler.bind(this);
         this.layerChangeHandler = this.layerChangeHandler.bind(this)
@@ -54,14 +62,12 @@ class App extends Component {
                     parsed.push({...d, ...ospoint.toWGS84()});
                 });
                 let groupedByTrees = d3.nest().key(d => d.name).object(parsed);
-                let settingsTrees = {};
-                Object.keys(groupedByTrees).forEach(d=> {settingsTrees[d.name]  = d.value});
                 this.setState({
                     data: groupedByTrees,
                     // settings: settingsTrees
-                    settings: Object.keys(groupedByTrees).map(key => {return {name: key, value: true, target: `trees-layer-${key}`}})
+                    settings: Object.keys(groupedByTrees).map(key => {
+                        return {name: key, value: true, color: d3.rgb(...groupedByTrees[key][0].color).toString()}})
                 });
-                console.log(this.state.settings)
                 this.forceUpdate()
             } else {
 
@@ -94,10 +100,21 @@ class App extends Component {
             settings:settings
         })
     }
+    hoverHandler(data) {
+        console.log('here',data );
+        this.setState({mouseX: data.x, mouseY: data.y, hoveredObject: data.object});
+    }
+
+
     render() {
-        console.log(this.state.settings)
         return (
             <div className="App">
+                {this.state.hoveredObject &&
+                    <div style={{
+                        ...tooltipStyle,
+                        transform: `translate(${this.state.mouseX}px, ${this.state.mouseY}px)`
+                    }}><div>{this.state.hoveredObject.name}</div>
+                    </div>}
                 <TreesLayerControl
                     settings={this.state.settings}
                     onChange={settings => this.layerChangeHandler(settings)}
@@ -115,6 +132,7 @@ class App extends Component {
                         viewport = {this.state.viewport}
                         data = {this.state.data}
                         settings = {this.state.settings}
+                        onHover={this.hoverHandler.bind(this)}
                     />
                 </MapGL>
             </div>

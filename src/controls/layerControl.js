@@ -51,6 +51,11 @@ export class TreesLayerControl extends Component {
 }
 
 const Checkbox = (settingName) => {
+    let colorStyle = {
+        width: '10px',
+        height: '10px',
+        'backgroundColor':'blue'
+    }
     return (
         <div  key={settingName.settingName}>
             <div className="input-group">
@@ -61,7 +66,7 @@ const Checkbox = (settingName) => {
                        onChange={e => {console.log(e.target.value);
                             settingName.onChange(settingName.settingName, e.target.checked)
                        }}/>
-                    {settingName.settingName}
+                    <span style={colorStyle}></span>{settingName.settingName}
                 </label>
 
             </div>
