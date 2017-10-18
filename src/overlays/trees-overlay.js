@@ -6,7 +6,6 @@ export default class TreesOverlay extends Component {
         if(!this.props.data|| Object.keys(this.props.data).length === 0) {
             return null
         }
-        console.log(this.props);
         let layerSettings = this.props.settings;
         let layers = [];
 
@@ -24,7 +23,7 @@ export default class TreesOverlay extends Component {
                             }
                             return 7;
                         },
-                        onHover: info => {console.log('Hovered:', info, key); this.props.onHover(info, key)},
+                        onHover: info => {this.props.onHover(info, key)},
                         onClick: info => console.log('Clicked:', info),
                         pickable: true,
                         radiusMinPixels: 0.25,

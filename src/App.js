@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import { slide as Menu } from 'react-burger-menu';
 
 import './App.css';
 import './react-select.css';
-import { tooltipStyle } from './styles';
+import { tooltipStyle, infoboxStyles } from './styles';
 
 import MapGL from 'react-map-gl';
 import * as d3 from 'd3';
@@ -43,6 +44,7 @@ class App extends Component {
     componentDidMount() {
         window.addEventListener('resize', this.resizeHandler);
         this.resizeHandler();
+        console.log(infoboxStyles)
 
         d3.csv('data/Borough_tree_list_may16.csv', d => {
             return {
@@ -101,7 +103,6 @@ class App extends Component {
         })
     }
     hoverHandler(data) {
-        console.log('here',data );
         this.setState({mouseX: data.x, mouseY: data.y, hoveredObject: data.object});
     }
 
@@ -116,9 +117,18 @@ class App extends Component {
                     }}><div>{this.state.hoveredObject.name}</div>
                     </div>}
                 <TreesLayerControl
+                    title={'Street Trees of London'}
                     settings={this.state.settings}
                     onChange={settings => this.layerChangeHandler(settings)}
                 />
+                {/*<Menu right style={ infoboxStyles } noOverlay isOpen={ false } >*/}
+                    {/*Info*/}
+                <Menu right styles={ infoboxStyles } noOverlay isOpen={ false }>
+                    <h4>Street trees of London</h4>
+                    <div>Based on the 2015 street trees dataset from <a href={'https://data.london.gov.uk/dataset/local-authority-maintained-trees'}>here</a></div>
+                    <div>Hover over each dot to see which tree it is</div>
+
+                </Menu>
                 <MapGL
                     {...this.state.viewport}
                     mapStyle={MAPBOX_STYLE}

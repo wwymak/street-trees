@@ -53,3 +53,39 @@ export const spinner = {
     transformOrigin: '20px 20px',
     zIndex: 110
 };
+
+export const infoboxStyles = {
+    bmBurgerButton: {
+        position: 'fixed',
+        width: '36px',
+        height: '30px',
+        right: '36px',
+        top: '36px'
+    },
+    bmBurgerBars: {
+        background: 'rgba(102,102,102,1.0)'
+    },
+    bmCrossButton: {
+        height: '24px',
+        width: '24px'
+    },
+    bmCross: {
+        background: '#bdc3c7'
+    },
+    bmMenu: {
+        background: 'rgba(102,102,102,1.0)',
+        padding: '2.5em 1.5em 0',
+        fontSize: '13px'
+    },
+    bmMorphShape: {
+        fill: 'rgba(102,102,102,1.0)'
+    },
+    bmItemList: {
+        color: '#b8b7ad',
+        padding: '0.8em',
+        fontSize:' 13px'
+    },
+    bmOverlay: {
+        background: 'rgba(0, 0, 0, 0.3)'
+    }
+};

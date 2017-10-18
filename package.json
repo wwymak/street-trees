@@ -13,6 +13,7 @@
     "luma.gl": "^4.0.5",
     "ospoint": "^0.2.0",
     "react": "^16.0.0",
+    "react-burger-menu": "^2.1.9",
     "react-dom": "^16.0.0",
     "react-map-gl": "^3.0.5",
     "react-select": "^1.0.0-rc.10",
